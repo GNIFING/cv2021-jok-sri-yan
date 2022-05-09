@@ -2,6 +2,12 @@
 
 This repository is for the the 2110433 Computer Vision term project. The project outlines pose classification problem to classify captured real-time video in order to control Subway Surfer-styled Game.
 
+Group Members:
+* 6231327821 Thanat Raktham
+* 6231337021 Narawich Lertprasertkul
+* 6231341521 Pon-ek Tangmunchittham
+* 6231347321 Pattharaphon Srithong
+
 ## Prerequisites
 
 Please find the `requirements.txt` in top directory to install relevant libralies. This project uses `Python 3.9.12`
