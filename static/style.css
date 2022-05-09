@@ -15,7 +15,8 @@ body {
 }
 
 .container {
-  margin: 20px 40px;
+  /* margin: 20px 40px; */
+  margin-top: 20px;
   color: white;
 }
 
@@ -37,6 +38,13 @@ body {
 
 .profile {
   flex-basis: 260px;
+}
+
+.box {
+  width: 400px;
+  height: 400px;
+  background-color: white;
+  border-radius: 20px;
 }
 
 .profile .profile-img {
@@ -106,4 +114,8 @@ body {
   .profile p {
     margin: 20px 10px 80px 10px;
   }
+}
+
+hr.new1 {
+  border-top: 10px solid rgb(255, 255, 255);
 }
