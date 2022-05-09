@@ -5,13 +5,11 @@ import numpy as np
 import mediapipe as mp
 
 CAM_NO = 0
-CONTROL_KEYBOARD = True
 UP_ROLL_FRAME = 4
 UP_THRESH_MIN_Y_DELTA = 0.35
 UP_THRESH_MIN_SD = 0.90
 DOWN_THRESH_MAX_SD = 0.70
 DOWN_AFTER_DELAY = 10
-KEY_DELAY = 0.05
 
 # Initialize the objects
 app = Flask(__name__)
@@ -22,14 +20,6 @@ video = cv2.VideoCapture(0)
 
 # Load the pretrained model
 # face_cascade.load(cv2.samples.findFile("haarcascade_frontalface_alt.xml"))
-
-if CONTROL_KEYBOARD:
-    from pynput.keyboard import Key, Controller
-    def keyboard_press(key):
-        keyboard.press(key)
-        time.sleep(0.05)
-        keyboard.release(key)
-    keyboard = Controller()
 
 
 mp_drawing = mp.solutions.drawing_utils
@@ -167,7 +157,10 @@ def main(cap):
             if not results.pose_landmarks:
                 image.flags.writeable = True
                 image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-                cv2.imshow("MediaPipe Pose", image)
+                ret, jpeg = cv2.imencode('.jpg', image)
+                frame = jpeg.tobytes()        
+                yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
                 continue
             
             # Classification
@@ -186,31 +179,22 @@ def main(cap):
             )
             
             # Control and output to video
-            CONTROL_KEYBOARD = False
             if pose_result == "right":
                 if before_position != 1:
                     before_position = 1
-                    if CONTROL_KEYBOARD:
-                        keyboard_press(Key.right)
                 write_text(image, "Right")
             elif pose_result == "left":
                 if before_position != 2:
                     before_position = 2
-                    if CONTROL_KEYBOARD:
-                        keyboard_press(Key.left)
                 write_text(image, "Left")
             elif pose_result == "up" and delay_pose <= 0:
                 if before_position != 3 and before_position != 4:
                     before_position = 3
-                    if CONTROL_KEYBOARD:
-                        keyboard_press(Key.up)
                 write_text(image, "Up")
             elif pose_result == "under":
                 if before_position != 4:
                     before_position = 4
                     delay_pose = DOWN_AFTER_DELAY
-                    if CONTROL_KEYBOARD:
-                        keyboard_press(Key.down)
                 write_text(image, "Under")
             else:
                 before_position = 5
