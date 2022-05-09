@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, flash
+from flask import Flask, render_template, Response
 import cv2
 import time
 import numpy as np
@@ -16,6 +16,7 @@ KEY_DELAY = 0.05
 # Initialize the objects
 app = Flask(__name__)
 app.secret_key = "poomerruncher"
+app._static_folder = "static"
 video = cv2.VideoCapture(0)
 # face_cascade = cv2.CascadeClassifier()
 
@@ -251,8 +252,11 @@ def main(cap):
 #                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 @app.route("/")
 def index():
-	flash("what's your name?")
 	return render_template("index.html")
+
+@app.route("/aboutus")
+def about_us():
+	return render_template("about_us.html")
 
 @app.route('/cam')
 def video_feed():
